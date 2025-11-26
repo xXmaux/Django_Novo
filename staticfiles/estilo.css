@@ -1,0 +1,180 @@
+/* Reset */
+*,
+*:after,
+*:before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-size: 1.5rem;
+    background: #808cab;
+}
+
+th {
+    padding: 2px 6px;
+}
+
+td {
+    padding: 0px 6px;
+}
+
+.menu {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 0 1.5rem;
+    box-shadow: 0 2px 8px rgba(23, 156, 156, 0.08);
+    border-bottom: 1px solid rgba(23, 156, 156, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu__links {
+    list-style: none;
+    display: flex;
+}
+
+.menu__links a {
+    display: block;
+    color: #179c9c;
+    padding: 1.2rem 1.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.menu__links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #179c9c, #1bb3b3);
+    transform: translateX(-50%);
+    transition: width 0.3s ease;
+}
+
+.menu__links a:hover {
+    background: rgba(23, 156, 156, 0.08);
+    color: #127a7a;
+}
+
+.menu__links a:hover::after {
+    width: 80%;
+}
+
+/* Informações do usuário logado */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.8rem 1.2rem;
+    background: rgba(23, 156, 156, 0.08);
+    border-radius: 25px;
+    border: 1px solid rgba(23, 156, 156, 0.15);
+}
+
+.user-info i {
+    font-size: 2rem;
+    color: #179c9c;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.user-greeting {
+    font-size: 0.75rem;
+    color: #6b7c7c;
+    font-weight: 400;
+}
+
+.user-name {
+    font-size: 0.95rem;
+    color: #179c9c;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+/* ... resto do código ... */
+/* Fundo com bolinhas suaves */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(180deg, #eaf6f5, #ffffff);
+    overflow-x: hidden;
+    position: relative;
+}
+
+body::before,
+body::after {
+    content: "";
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(199,233,230,0.6) 0%, rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: -1;
+}
+
+body::before {
+    top: -100px;
+    left: -150px;
+}
+
+body::after {
+    bottom: -150px;
+    right: -150px;
+}
+/* Fundo com bolinhas suaves */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(180deg, #eaf6f5, #ffffff);
+    overflow-x: hidden;
+    position: relative;
+}
+
+body::before,
+
+body::after {
+    content: "";
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(199,233,230,0.6) 0%, rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: -1;
+}
+
+body::before {
+    top: -100px;
+    left: -150px;
+}
+
+body::after {
+    bottom: -150px;
+    right: -150px;
+}
+
+.card-link {
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+}
+
+.card-link .card {
+    cursor: pointer;
+}
+
