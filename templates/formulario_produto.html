@@ -1,0 +1,223 @@
+
+{% extends 'page.html' %}
+{% block conteudo %}
+
+<style>
+    /* Estilo verde-água para o formulário de produtos */
+    .container h2 {
+        color: #179c9c;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .container h4 {
+        color: #179c9c;
+        font-weight: 600;
+        border-left: 4px solid #179c9c;
+        padding-left: 12px;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .card {
+        background: white;
+        border: 1px solid rgba(23, 156, 156, 0.15);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(23, 156, 156, 0.08);
+        margin-bottom: 1.5rem;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .border {
+        border: 1px solid rgba(23, 156, 156, 0.15) !important;
+        border-radius: 8px;
+        background: rgba(244, 249, 249, 0.5);
+    }
+
+    /* Botões estilizados */
+    .btn-primary {
+        background: linear-gradient(135deg, #179c9c, #1bb3b3);
+        border: none;
+        color: white;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        box-shadow: 0 3px 8px rgba(23, 156, 156, 0.2);
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #127a7a, #158a8a);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 12px rgba(23, 156, 156, 0.3);
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #179c9c, #02a67c);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 12px 32px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(23, 156, 156, 0.25);
+    }
+
+    .btn-success:hover {
+        background: linear-gradient(135deg, #127a7a, #028262);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 14px rgba(23, 156, 156, 0.35);
+    }
+
+    /* Remove button styling */
+    .remove-form {
+        background: linear-gradient(135deg, #E53935, #c62828);
+        border: none;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        float: right;
+    }
+
+    .remove-form:hover {
+        background: linear-gradient(135deg, #c62828, #b71c1c);
+        transform: scale(1.05);
+    }
+
+    /* Input styling */
+    input[type="text"],
+    input[type="number"],
+    input[type="file"],
+    textarea,
+    select {
+        border: 1.5px solid #e0eded;
+        border-radius: 8px;
+        padding: 10px 12px;
+        transition: all 0.3s ease;
+        width: 100%;
+        font-family: inherit;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    textarea:focus,
+    select:focus {
+        outline: none;
+        border-color: #179c9c;
+        box-shadow: 0 0 0 3px rgba(23, 156, 156, 0.1);
+    }
+
+    label {
+        color: #2d3e3e;
+        font-weight: 500;
+        margin-bottom: 6px;
+        display: block;
+    }
+</style>
+
+<div class="container mt-4">
+
+    <h2>{{ form_titulo }}</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <h4 class="mt-3">📦 Dados do Produto</h4>
+        <div class="card card-body">
+            {{ form.as_p }}
+        </div>
+
+        <h4 class="mt-4">✨ Características</h4>
+        <div class="card card-body">
+            {{ caracteristicas.management_form }}
+            <div id="caracteristicas-container">
+                {% for f in caracteristicas %}
+                    <div class="border p-2 mb-2 caracteristica-form">
+                        {{ f.as_p }}
+                        {% if not forloop.first %}
+                            <button type="button" class="remove-form" onclick="this.closest('.caracteristica-form').remove()">
+                                Remover
+                            </button>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" class="btn btn-primary add-more-caracteristica">
+                 Adicionar Característica
+            </button>
+        </div>
+
+        <h4 class="mt-4">🔧 Especificações Técnicas</h4>
+        <div class="card card-body">
+            {{ especificacoes.management_form }}
+            <div id="especificacoes-container">
+                {% for f in especificacoes %}
+                    <div class="border p-2 mb-2 especificacao-form">
+                        {{ f.as_p }}
+                        {% if not forloop.first %}
+                            <button type="button" class="remove-form" onclick="this.closest('.especificacao-form').remove()">
+                                 Remover
+                            </button>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" class="btn btn-primary add-more-especificacao">
+                 Adicionar Especificação
+            </button>
+        </div>
+
+        <div class="text-center mt-4 mb-4">
+            <button type="submit" class="btn btn-success">Salvar Produto</button>
+        </div>
+
+    </form>
+
+</div>
+
+<script>
+    // Script para adicionar dinamicamente características
+    document.querySelector('.add-more-caracteristica').addEventListener('click', function() {
+        const container = document.getElementById('caracteristicas-container');
+        const totalForms = document.querySelector('#id_caracteristicas-TOTAL_FORMS');
+        const formNum = parseInt(totalForms.value);
+
+        const newForm = container.querySelector('.caracteristica-form').cloneNode(true);
+        const formRegex = new RegExp(`caracteristicas-(\\d+)-`, 'g');
+
+        newForm.innerHTML = newForm.innerHTML.replace(formRegex, `caracteristicas-${formNum}-`);
+        newForm.querySelectorAll('input, textarea').forEach(input => {
+            input.value = '';
+            input.id = input.id.replace(/-\d+-/, `-${formNum}-`);
+        });
+
+        container.appendChild(newForm);
+        totalForms.value = formNum + 1;
+    });
+
+    // Script para adicionar dinamicamente especificações
+    document.querySelector('.add-more-especificacao').addEventListener('click', function() {
+        const container = document.getElementById('especificacoes-container');
+        const totalForms = document.querySelector('#id_especificacoes-TOTAL_FORMS');
+        const formNum = parseInt(totalForms.value);
+
+        const newForm = container.querySelector('.especificacao-form').cloneNode(true);
+        const formRegex = new RegExp(`especificacoes-(\\d+)-`, 'g');
+
+        newForm.innerHTML = newForm.innerHTML.replace(formRegex, `especificacoes-${formNum}-`);
+        newForm.querySelectorAll('input, textarea').forEach(input => {
+            input.value = '';
+            input.id = input.id.replace(/-\d+-/, `-${formNum}-`);
+        });
+
+        container.appendChild(newForm);
+        totalForms.value = formNum + 1;
+    });
+</script>
+
+{% endblock %}

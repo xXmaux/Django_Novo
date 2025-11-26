@@ -1,0 +1,285 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+      <style>
+        /* 🔙 Estilo da seta de voltar */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 25px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: #179c9c;
+            font-size: 16px;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 8px 14px;
+            border-radius: 30px;
+            box-shadow: 0 2px 8px rgba(23, 156, 156, 0.15);
+            transition: all 0.25s ease;
+            backdrop-filter: blur(6px);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateX(-3px);
+            color: #127a7a;
+        }
+
+        .back-button svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* 🔔 Estilo das mensagens Django */
+        .message-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .alert {
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            animation: slideDown 0.4s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert.success { 
+            background: linear-gradient(135deg, #179c9c, #02a67c);
+        }
+        
+        .alert.error { 
+            background: linear-gradient(135deg, #E53935, #c62828);
+        }
+        
+        .alert.warning { 
+            background: linear-gradient(135deg, #FFB300, #FFA000);
+            color: #333;
+        }
+
+        @keyframes slideDown {
+            from { 
+                opacity: 0; 
+                transform: translate(-50%, -20px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translate(-50%, 0);
+            }
+        }
+
+        /* Auto-hide messages after 5 seconds */
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translate(-50%, -20px);
+            }
+        }
+
+        .alert.auto-hide {
+            animation: slideDown 0.4s ease-out, fadeOut 0.5s ease-out 4.5s forwards;
+        }
+
+        /* Esconde a mensagem de sucesso por padrão */
+        .gentle-success {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- 🔔 Mensagens Django -->
+    {% if messages %}
+    <div class="message-container">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} auto-hide">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Fundo -->
+    <div class="soft-background">
+        <div class="floating-shapes">
+            <div class="soft-blob blob-1"></div>
+            <div class="soft-blob blob-2"></div>
+            <div class="soft-blob blob-3"></div>
+            <div class="soft-blob blob-4"></div>
+        </div>
+    </div>
+
+     <a href="{% url 'home' %}" class="back-button">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span>Voltar</span>
+    </a>
+
+    <!-- Container principal -->
+    <div class="login-container">
+        <div class="soft-card">
+            <!-- Cabeçalho -->
+            <div class="comfort-header">
+                <div class="gentle-logo">
+                    <div class="logo-circle">
+                        <div class="comfort-icon">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                <path d="M16 2C8.3 2 2 8.3 2 16s6.3 14 14 14 14-6.3 14-14S23.7 2 16 2z"
+                                      fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M12 16a4 4 0 108 0"
+                                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                                <circle cx="20" cy="12" r="1.5" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="gentle-glow"></div>
+                    </div>
+                </div>
+                <h1 class="comfort-title">Bem-vindo</h1>
+                <p class="gentle-subtitle">Faça o login abaixo</p>
+            </div>
+
+            <!-- Formulário -->
+            <form class="comfort-form" id="loginForm" method="POST" action="{% url 'login_usuario' %}">
+                {% csrf_token %}
+                    <!-- Campo de Email -->
+                    <div class="soft-field">
+                        <div class="field-container">
+                            <input type="email" id="email" name="email" required autocomplete="email">
+                            <label for="email">Digite seu e-mail</label>
+                            <div class="field-accent"></div>
+                        </div>
+                    </div>
+
+
+                    <!-- Campo de Senha -->
+                    <div class="soft-field">
+                        <div class="field-container">
+                            <input type="password" id="password" name="senha" required autocomplete="current-password">
+                            <label for="password">Digite sua senha</label>
+                            <button type="button" class="gentle-toggle" id="passwordToggle" aria-label="Mostrar senha">
+                                <div class="toggle-icon">
+                                    <svg class="eye-open" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <path d="M10 3c-4.5 0-8.3 3.8-9 7 .7 3.2 4.5 7 9 7s8.3-3.8 9-7c-.7-3.2-4.5-7-9-7z"
+                                              stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                        <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5"
+                                                fill="none"/>
+                                    </svg>
+                                    <svg class="eye-closed" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <path d="M3 3l14 14M8.5 8.5a3 3 0 004 4m2.5-2.5C15 10 12.5 7 10 7c-.5 0-1 .1-1.5.3M10 13c-2.5 0-4.5-2-5-3 .3-.6.7-1.2 1.2-1.7"
+                                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                              stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                            </button>
+                            <div class="field-accent"></div>
+                        </div>
+                    </div>
+
+                    <a href="{% url 'esqueceu_senha' %}" class="comfort-link">Esqueceu a senha?</a>
+
+                    <button type="submit" class="comfort-button">
+                        <div class="button-background"></div>
+                        <span class="button-text">Entrar</span>
+                        <div class="button-glow"></div>
+                    </button>
+                </form>
+
+            <!-- Link para cadastro -->
+            <div class="comfort-signup">
+                <span class="signup-text">Não tem conta?</span>
+                <a href="{% url 'cadastrar' %}" class="comfort-link signup-link">Cadastrar</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS INLINE - SEM ARQUIVO EXTERNO -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('JavaScript inline carregado - NOVA VERSÃO');
+            
+            const passwordToggle = document.getElementById('passwordToggle');
+            const passwordInput = document.getElementById('password');
+            const emailInput = document.getElementById('email');
+
+            // Adiciona placeholders para as animações dos labels
+            if (emailInput) emailInput.setAttribute('placeholder', ' ');
+            if (passwordInput) passwordInput.setAttribute('placeholder', ' ');
+
+            // Toggle de senha (mostrar/ocultar)
+            if (passwordToggle && passwordInput) {
+                passwordToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const type = passwordInput.type === 'password' ? 'text' : 'password';
+                    passwordInput.type = type;
+                    passwordToggle.classList.toggle('toggle-active', type === 'text');
+                });
+            }
+
+            // Efeitos visuais nos inputs
+            const inputs = [emailInput, passwordInput].filter(input => input !== null);
+            
+            inputs.forEach(function(input) {
+                input.addEventListener('focus', function(e) {
+                    const container = e.target.closest('.field-container');
+                    if (container) {
+                        container.style.transition = 'all 0.3s ease';
+                        container.style.transform = 'translateY(-1px)';
+                    }
+                });
+
+                input.addEventListener('blur', function(e) {
+                    const container = e.target.closest('.field-container');
+                    if (container) {
+                        container.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            // Efeito de clique no botão
+            const submitButton = document.querySelector('.comfort-button');
+            if (submitButton) {
+                submitButton.addEventListener('mousedown', function() {
+                    submitButton.style.transform = 'scale(0.98)';
+                });
+                
+                submitButton.addEventListener('mouseup', function() {
+                    submitButton.style.transform = 'scale(1)';
+                });
+                
+                submitButton.addEventListener('mouseleave', function() {
+                    submitButton.style.transform = 'scale(1)';
+                });
+            }
+
+            // Auto-hide messages after 5 seconds
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                    alert.style.display = 'none';
+                });
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

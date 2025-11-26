@@ -1,0 +1,331 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HANDEL - Catálogo Online</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <style>
+
+        body {
+            background: linear-gradient(180deg, #f4f9f9, #eef6f6);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #333;
+            text-align: center;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background-color: #ffffffcc;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #179c9c !important;
+            margin-left: 20px;
+        }
+
+        .login-icon {
+            font-size: 1.5rem;
+            color: #179c9c;
+            margin-right: 20px;
+        }
+
+        /* HERO */
+        .hero {
+            margin-top: 80px;
+            padding: 80px 0;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #179c9c, #bde6e6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin: 20px auto 30px;
+            color: #444;
+        }
+
+        .btn-custom {
+            padding: 10px 25px;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        /* Botão verde principal */
+        .btn-success-custom {
+            background-color: #179c9c;
+            border: none;
+            color: white;
+            box-shadow: 0 3px 10px rgba(23, 156, 156, 0.25);
+        }
+
+        .btn-success-custom:hover {
+            background-color: #127a7a;
+            box-shadow: 0 6px 14px rgba(23, 156, 156, 0.35);
+            transform: translateY(-2px);
+        }
+
+        /* Botão Contato - personalizado */
+        .btn-outline-custom {
+            color: #179c9c;
+            border: 2px solid #179c9c;
+            background-color: transparent;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-custom:hover {
+            background: linear-gradient(90deg, #179c9c, #1bb3b3);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(23, 156, 156, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-custom:active {
+            transform: scale(0.97);
+        }
+
+        /* CATEGORIAS */
+        .categorias {
+            margin-top: 100px;
+            margin-bottom: 80px;
+        }
+
+        .categorias h2 {
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Garantir que o link não altere o layout do card */
+        a.card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* RODAPÉ */
+        .features {
+            background-color: #f9fdfd;
+            padding: 50px 0;
+        }
+
+        .features h5 {
+            color: #179c9c;
+            font-weight: 600;
+        }
+
+        /* MODAL personalizado */
+        .modal-content {
+            border-radius: 18px;
+            box-shadow: 0 10px 40px rgba(23, 156, 156, 0.25);
+        }
+
+        .modal-header {
+            background: linear-gradient(90deg, #179c9c, #1bb3b3);
+            color: #fff;
+            border-top-left-radius: 18px;
+            border-top-right-radius: 18px;
+        }
+
+        .modal-title {
+            font-weight: 600;
+        }
+
+        .modal-body a {
+            color: #179c9c;
+            text-decoration: none;
+        }
+
+        .modal-body a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-success {
+            background-color: #179c9c;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #127a7a;
+        }
+
+        /* garante que o <a> com classe card se comporte como card sem aumentar tamanho */
+        a.card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        /* tamanho máximo dos cards para manter proporção */
+        .cat-card {
+            max-width: 260px; /* ajuste se quiser maior/menor */
+            margin: 0 auto; /* centraliza dentro da coluna */
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid d-flex align-items-center">
+
+            <!-- Lado esquerdo (pode colocar logo depois) -->
+            <div class="me-auto"></div>
+
+            <!-- Ícone alinhado à direita -->
+            <a href="{% url 'login_usuario' %}" class="login-icon">
+                <i class="bi bi-person-circle"></i>
+            </a>
+
+        </div>
+    </nav>
+
+
+    <!-- SEÇÃO PRINCIPAL -->
+    <section class="hero">
+        <img src="{% static 'handel.png' %}" alt="HANDEL Logo" width="110">
+        <h1>HANDEL</h1>
+        <p>Seu catálogo online completo com os melhores produtos e ofertas especiais</p>
+        <div>
+            <a href="{% url 'catalogo' %}" class="btn btn-success-custom btn-custom">Explorar Catálogo</a>
+            <button type="button" class="btn btn-outline-custom btn-custom"
+                    data-bs-toggle="modal" data-bs-target="#contatoModal">
+                <i class="bi bi-envelope-fill me-2"></i> Contato
+            </button>
+        </div>
+    </section>
+
+    <!-- CATEGORIAS -->
+    <section class="categorias container">
+        <h2>Explore Nossas Categorias</h2>
+        <p>Encontre exatamente o que você procura</p>
+
+        <div class="row justify-content-center mt-4">
+
+            {% for cat in categorias_principais %}
+                {% if cat.nome == "Eletrônicos" %}
+                    <a href="{% url 'catalogo' %}?categoria={{ cat.id }}" class="col-md-2 card m-3 p-4" style="text-decoration: none; color: inherit; cursor: pointer;">
+                        <i class="bi bi-laptop fs-4 text-success mb-3"></i>
+                        <h5>Eletrônicos</h5>
+                        <p>Tecnologia de ponta</p>
+                    </a>
+                {% elif cat.nome == "Moda" %}
+                    <a href="{% url 'catalogo' %}?categoria={{ cat.id }}" class="col-md-2 card m-3 p-4" style="text-decoration: none; color: inherit; cursor: pointer;">
+                        <i class="bi bi-bag-heart fs-4 text-success mb-3"></i>
+                        <h5>Moda</h5>
+                        <p>Estilo e tendências</p>
+                    </a>
+                {% elif cat.nome == "Casa & Decor" %}
+                    <a href="{% url 'catalogo' %}?categoria={{ cat.id }}" class="col-md-2 card m-3 p-4" style="text-decoration: none; color: inherit; cursor: pointer;">
+                        <i class="bi bi-house-door fs-4 text-success mb-3"></i>
+                        <h5>Casa & Decor</h5>
+                        <p>Conforto para seu lar</p>
+                    </a>
+                {% elif cat.nome == "Presentes" %}
+                    <a href="{% url 'catalogo' %}?categoria={{ cat.id }}" class="col-md-2 card m-3 p-4" style="text-decoration: none; color: inherit; cursor: pointer;">
+                        <i class="bi bi-gift fs-4 text-success mb-3"></i>
+                        <h5>Presentes</h5>
+                        <p>Ideias especiais</p>
+                    </a>
+                {% endif %}
+            {% endfor %}
+
+        </div>
+    </section>
+
+
+    <!-- RODAPÉ -->
+    <section class="features">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+
+                <div class="col-md-3">
+                    <i class="bi bi-truck fs-2 text-success mb-3"></i>
+                    <h5>Entrega Rápida</h5>
+                    <p>Receba seus produtos com agilidade e segurança</p>
+                </div>
+
+                <div class="col-md-3">
+                    <i class="bi bi-shield-check fs-2 text-success mb-3"></i>
+                    <h5>Compra Segura</h5>
+                    <p>Proteção total em todas as suas transações</p>
+                </div>
+
+                <div class="col-md-3">
+                    <i class="bi bi-headset fs-2 text-success mb-3"></i>
+                    <h5>Suporte 24/7</h5>
+                    <p>Atendimento sempre que você precisar</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Modal de Contato -->
+    <div class="modal fade" id="contatoModal" tabindex="-1" aria-labelledby="contatoTitulo" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="contatoTitulo">Fale Conosco</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+
+                <div class="modal-body">
+                    <ul class="list-unstyled text-start m-0">
+                        <li class="mb-2">
+                            <i class="bi bi-envelope me-2"></i>
+                            <strong>E-mail:</strong>
+                            <a href="mailto:contato@handel.com.br">contato@handel.com.br</a>
+                        </li>
+                        <li>
+                            <i class="bi bi-telephone me-2"></i>
+                            <strong>Telefone/WhatsApp:</strong>
+                            <a href="https://wa.me/5546999999999" target="_blank" rel="noopener">(+55) 46 9 9999-9999</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="modal-footer border-0">
+                    <a class="btn btn-success" href="mailto:contato@handel.com.br">
+                        <i class="bi bi-send me-1"></i> Enviar e-mail
+                    </a>
+                    <a class="btn btn-outline-custom" href="https://wa.me/5544999999999" target="_blank" rel="noopener">
+                        <i class="bi bi-whatsapp me-1"></i> Abrir WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

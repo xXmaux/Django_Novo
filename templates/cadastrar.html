@@ -1,0 +1,297 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar</title>
+
+    <link rel="stylesheet" href="{% static 'cadastro.css' %}">
+
+    <style>
+        /* 🔙 Estilo da seta de voltar */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 25px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: #179c9c;
+            font-size: 16px;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 8px 14px;
+            border-radius: 30px;
+            box-shadow: 0 2px 8px rgba(23, 156, 156, 0.15);
+            transition: all 0.25s ease;
+            backdrop-filter: blur(6px);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateX(-3px);
+            color: #127a7a;
+        }
+
+        .back-button svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* 🔔 Estilo das mensagens Django */
+        .message-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+        }
+
+        .alert {
+            padding: 12px 22px;
+            border-radius: 8px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: white;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .alert.success { 
+            background: linear-gradient(135deg, #179c9c, #02a67c);
+            box-shadow: 0 4px 12px rgba(23, 156, 156, 0.3);
+        }
+        .alert.error { 
+            background: #E53935; 
+            box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+        }
+        .alert.warning { 
+            background: #FFB300; 
+            color: #333; 
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -10px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        /* Estilos do checkbox vendedor */
+        .checkbox-field {
+            margin: 8px 0;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            padding-left: 35px;
+            user-select: none;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            left: 0;
+            height: 22px;
+            width: 22px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border: 2px solid #e0eded;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-container:hover input ~ .checkmark {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-color: #179c9c;
+        }
+
+        .checkbox-container input:checked ~ .checkmark {
+            background: linear-gradient(135deg, #179c9c, #02a67c);
+            border-color: #179c9c;
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .checkbox-container input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .checkbox-container .checkmark:after {
+            left: 7px;
+            top: 3px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .checkbox-label {
+            color: #2d3e3e;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .checkbox-hint {
+            margin: 6px 0 0 35px;
+            font-size: 13px;
+            color: #8b9c9c;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 🔔 Mensagens Django -->
+    {% if messages %}
+    <div class="message-container">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Fundo animado -->
+    <div class="soft-background">
+        <div class="floating-shapes">
+            <div class="soft-blob blob-1"></div>
+            <div class="soft-blob blob-2"></div>
+            <div class="soft-blob blob-3"></div>
+            <div class="soft-blob blob-4"></div>
+        </div>
+    </div>
+
+    <!-- 🔙 Botão de voltar -->
+    <a href="{% url 'login_usuario' %}" class="back-button">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span>Voltar</span>
+    </a>
+
+    <!-- Formulário -->
+    <div class="login-container">
+        <div class="soft-card">
+            <div class="comfort-header">
+                <div class="gentle-logo">
+                    <div class="logo-circle">
+                        <div class="comfort-icon">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                <path d="M16 2C8.3 2 2 8.3 2 16s6.3 14 14 14 14-6.3 14-14S23.7 2 16 2z"
+                                      fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                <circle cx="16" cy="12" r="3" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="gentle-glow"></div>
+                    </div>
+                </div>
+                <h1 class="comfort-title">Criar Conta</h1>
+                <p class="gentle-subtitle">Preencha os campos abaixo</p>
+            </div>
+
+            <form class="comfort-form" method="POST">
+                {% csrf_token %}
+
+                <div class="soft-field">
+                    <div class="field-container">
+                        <input type="text" id="username" name="username" placeholder=" " required>
+                        <label for="username">Nome de usuário</label>
+                        <div class="field-accent"></div>
+                    </div>
+                </div>
+
+                <div class="soft-field">
+                    <div class="field-container">
+                        <input type="email" id="email" name="email" placeholder=" " required>
+                        <label for="email">E-mail</label>
+                        <div class="field-accent"></div>
+                    </div>
+                </div>
+                
+                <div class="soft-field">
+                    <div class="field-container">
+                        <input type="text" id="telefone" name="telefone" placeholder=" " required>
+                        <label for="telefone">Telefone</label>
+                        <div class="field-accent"></div>
+                    </div>
+                </div>
+
+                <div class="soft-field">
+                    <div class="field-container">
+                        <input type="password" id="password1" name="password1" placeholder=" " required>
+                        <label for="password1">Senha</label>
+                        <div class="field-accent"></div>
+                    </div>
+                </div>
+
+                <div class="soft-field">
+                    <div class="field-container">
+                        <input type="password" id="password2" name="password2" placeholder=" " required>
+                        <label for="password2">Confirmar senha</label>
+                        <div class="field-accent"></div>
+                    </div>
+                </div>
+
+                <!-- Checkbox para vendedor -->
+                <div class="soft-field checkbox-field">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="is_vendedor" name="is_vendedor">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-label">Quero me cadastrar como vendedor</span>
+                    </label>
+                    <p class="checkbox-hint">Vendedores podem cadastrar e gerenciar produtos no catálogo</p>
+                </div>
+
+                <button type="submit" class="comfort-button">
+                    <div class="button-background"></div>
+                    <span class="button-text">Cadastrar</span>
+                    <div class="button-glow"></div>
+                </button>
+            </form>
+
+            <div class="comfort-signup">
+                <span class="signup-text">Já tem conta?</span>
+                <a href="{% url 'login_usuario' %}" class="comfort-link signup-link">Entrar</a>
+            </div>
+
+        </div>
+    </div>
+<script>
+    const tel = document.getElementById("telefone");
+
+    tel.addEventListener("input", function(e) {
+        let v = e.target.value.replace(/\D/g, "");
+        if (v.length > 11) v = v.slice(0, 11);
+
+        if (v.length > 6) {
+            e.target.value = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+        } else if (v.length > 2) {
+            e.target.value = `(${v.slice(0,2)}) ${v.slice(2)}`;
+        } else if (v.length > 0) {
+            e.target.value = `(${v}`;
+        }
+    });
+
+    // Adicionar placeholders para animação dos labels
+    document.querySelectorAll('.field-container input').forEach(input => {
+        input.setAttribute('placeholder', ' ');
+    });
+</script>
+</body>
+</html>

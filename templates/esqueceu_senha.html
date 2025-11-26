@@ -1,0 +1,192 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Senha</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+    <style>
+        /* Estilos inline específicos */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 25px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: #179c9c;
+            font-size: 16px;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 8px 14px;
+            border-radius: 30px;
+            box-shadow: 0 2px 8px rgba(23, 156, 156, 0.15);
+            transition: all 0.25s ease;
+            backdrop-filter: blur(6px);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateX(-3px);
+            color: #127a7a;
+        }
+
+        .back-button svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Mensagens */
+        .message-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .alert {
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            animation: slideDown 0.4s ease-out;
+        }
+
+        .alert.success {
+            background: linear-gradient(135deg, #179c9c, #02a67c);
+        }
+
+        .alert.error {
+            background: linear-gradient(135deg, #E53935, #c62828);
+        }
+
+        .alert.warning {
+            background: linear-gradient(135deg, #FFB300, #FFA000);
+            color: #333;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        .info-text {
+            text-align: center;
+            color: #6b7c7c;
+            font-size: 14px;
+            margin-top: 16px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mensagens Django -->
+    {% if messages %}
+    <div class="message-container">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Fundo animado -->
+    <div class="soft-background">
+        <div class="floating-shapes">
+            <div class="soft-blob blob-1"></div>
+            <div class="soft-blob blob-2"></div>
+            <div class="soft-blob blob-3"></div>
+            <div class="soft-blob blob-4"></div>
+        </div>
+    </div>
+
+    <!-- Botão voltar -->
+    <a href="{% url 'login_usuario' %}" class="back-button">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span>Voltar</span>
+    </a>
+
+    <!-- Container principal -->
+    <div class="login-container">
+        <div class="soft-card">
+            <!-- Cabeçalho -->
+            <div class="comfort-header">
+                <div class="gentle-logo">
+                    <div class="logo-circle">
+                        <div class="comfort-icon">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                <path d="M16 2C8.3 2 2 8.3 2 16s6.3 14 14 14 14-6.3 14-14S23.7 2 16 2z"
+                                      fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M16 10v6M16 22h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="gentle-glow"></div>
+                    </div>
+                </div>
+                <h1 class="comfort-title">Recuperar Senha</h1>
+                <p class="gentle-subtitle">Digite seu e-mail cadastrado</p>
+            </div>
+
+            <!-- Formulário -->
+            <form class="comfort-form" method="POST" action="{% url 'esqueceu_senha' %}">
+                {% csrf_token %}
+                
+                <!-- Campo de Email -->
+                <div class="soft-field">
+                    <div class="field-container">
+                        <input type="email" id="email" name="email" placeholder=" " required autocomplete="email">
+                        <label for="email">Digite seu e-mail</label>
+                        <div class="field-accent"></div>
+                    </div>
+                </div>
+
+                <button type="submit" class="comfort-button">
+                    <div class="button-background"></div>
+                    <span class="button-text">Enviar Nova Senha</span>
+                    <div class="button-glow"></div>
+                </button>
+            </form>
+
+            <div class="info-text">
+                <p>Você receberá uma nova senha temporária no seu e-mail. <br>
+                   Após fazer login, altere sua senha nas configurações.</p>
+            </div>
+
+            <!-- Link para login -->
+            <div class="comfort-signup">
+                <span class="signup-text">Lembrou a senha?</span>
+                <a href="{% url 'login_usuario' %}" class="comfort-link signup-link">Fazer Login</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-hide messages after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.style.display = 'none', 300);
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

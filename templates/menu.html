@@ -1,0 +1,21 @@
+<nav class="menu">
+    <ul class="menu__links">
+        <li>
+            <a class="menu__links" href="{% url 'catalogo' %}"> Catálogo </a>
+        </li>
+        <li>
+            <a class="menu__links" href="{% url 'produtos' %}">Produtos</a>
+        </li>
+    </ul>
+
+    <!-- Informações do usuário logado -->
+    {% if request.session.usuario_nome %}
+    <div class="user-info">
+        <i class="bi bi-person-circle"></i>
+        <div class="user-details">
+            <span class="user-greeting">Olá,</span>
+            <span class="user-name">{{ request.session.usuario_nome }}</span>
+        </div>
+    </div>
+    {% endif %}
+</nav>

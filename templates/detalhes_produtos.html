@@ -1,0 +1,270 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Detalhes do Produto - {{ produto.nome }}</title>
+    <link rel="stylesheet" href="{% static 'catalogo.css' %}" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9fafb;
+            color: #333;
+            margin: 0;
+            padding: 0 1rem;
+        }
+        .topo {
+            margin: 1rem 0;
+        }
+        .voltar {
+            text-decoration: none;
+            color: #028262;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .voltar:hover {
+            text-decoration: underline;
+        }
+        .detalhes-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 1rem auto 3rem;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+        }
+        .imagem-container {
+            flex: 1 1 400px;
+            max-width: 450px;
+        }
+        .imagem-container img {
+            width: 100%;
+            border-radius: 15px;
+            object-fit: cover;
+            max-height: 450px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+        }
+        .info-container {
+            flex: 1 1 400px;
+            display: flex;
+            flex-direction: column;
+        }
+        .categoria {
+            display: inline-block;
+            background-color: #02938a;
+            color: white;
+            padding: 0.2rem 0.7rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.7rem;
+            width: fit-content;
+        }
+        h1 {
+            margin: 0 0 0.3rem 0;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #111;
+        }
+        .descricao {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        .preco {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #028262;
+            margin-bottom: 1.5rem;
+        }
+        .btn-verde {
+            background-color: #28a745;
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+        .btn-verde:hover {
+            background-color: #218838;
+        }
+        .btn-acoes {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .btn-acao {
+            flex: 1;
+            border: 1px solid #ccc;
+            background: white;
+            color: #333;
+            border-radius: 6px;
+            padding: 0.5rem 0;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .btn-acao:hover {
+            background-color: #f0f0f0;
+            border-color: #028262;
+            color: #028262;
+        }
+        .caracteristicas {
+            margin-bottom: 2rem;
+        }
+        .caracteristicas h2 {
+            font-weight: 700;
+            margin-bottom: 0.7rem;
+        }
+        .caracteristicas ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .caracteristicas ul li {
+            position: relative;
+            padding-left: 1.3rem;
+            margin-bottom: 0.6rem;
+            color: #444;
+        }
+        .caracteristicas ul li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #028262;
+            font-weight: 700;
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+        .especificacoes {
+            border-top: 1px solid #ddd;
+            padding-top: 1rem;
+        }
+        .especificacoes h2 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .especificacoes dl {
+            display: grid;
+            grid-template-columns: max-content 1fr;
+            gap: 0.5rem 1rem;
+        }
+        .especificacoes dt {
+            font-weight: 600;
+            color: #555;
+        }
+        .especificacoes dd {
+            margin: 0;
+            color: #333;
+        }
+        /* Ícones básicos - usando emojis aqui para simplicidade */
+        .icon-whatsapp::before {
+            content: "💬";
+        }
+        .icon-heart::before {
+            content: "♡";
+        }
+        .icon-share::before {
+            content: "⇪";
+        }
+    </style>
+</head>
+<body>
+    <header class="topo">
+        <a href="{% url 'catalogo' %}" class="voltar">← Voltar ao Catálogo</a>
+    </header>
+
+    <main class="detalhes-container">
+        <div class="imagem-container">
+            {% if produto.imagem %}
+                <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" />
+            {% else %}
+                <img src="{% static 'sem-imagem.png' %}" alt="Imagem não disponível" />
+            {% endif %}
+        </div>
+        <div class="info-container">
+            <span class="categoria">{{ produto.categoria.nome }}</span>
+            <h1>{{ produto.nome }}</h1>
+
+            <p class="descricao">{{ produto.descricao|truncatewords:30 }}</p>
+
+            <div class="preco">R$ {{ produto.preco }}</div>
+
+            <a href="https://wa.me/55{{ produto.usuario.telefone }}" target="_blank"
+               class="btn-verde icon-whatsapp"
+               style="text-decoration: none; display: block; text-align: center;">
+                Falar com o Vendedor
+            </a>
+
+
+            <div class="btn-acoes">
+                <button class="btn-acao icon-share" type="button" aria-label="Compartilhar produto">Compartilhar</button>
+            </div>
+
+            <section class="caracteristicas">
+                {% for c in produto.caracteristicas.all %}
+                    <li>{{ c.descricao }}</li>
+                {% empty %}
+                    <li>Nenhuma característica cadastrada.</li>
+                {% endfor %}
+
+                </ul>
+            </section>
+
+            <section class="especificacoes">
+                <h2>Especificações Técnicas</h2>
+                <dl>
+                    {% for e in produto.especificacoes.all %}
+                        <dt>{{ e.nome }}</dt>
+                        <dd>{{ e.valor }}</dd>
+                    {% empty %}
+                        <dt>—</dt>
+                        <dd>Nenhuma especificação cadastrada.</dd>
+                    {% endfor %}
+
+                </dl>
+            </section>
+        </div>
+    </main>
+
+{#compartilhar produto    #}
+<script>
+document.querySelector(".icon-share").addEventListener("click", async () => {
+
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: "{{ produto.nome }}",
+                text: "Dê uma olhada neste produto: {{ produto.nome }}",
+                url: window.location.href
+            });
+        } catch (err) {
+            console.log("Erro ao compartilhar:", err);
+        }
+    } else {
+        alert("Seu navegador não suporta compartilhamento.");
+    }
+
+});
+</script>
+
+</body>
+</html>

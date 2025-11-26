@@ -1,0 +1,171 @@
+
+{% extends 'page.html' %}
+{% block conteudo %}
+<style>
+    /* Estilo verde-água igual ao index */
+    .content {
+        background: transparent;
+    }
+
+    h2.text-center {
+        color: #179c9c;
+        font-weight: 700;
+        margin-bottom: 2rem;
+    }
+
+    /* Botão Novo Produto - verde customizado */
+    .btn-success {
+        background: linear-gradient(135deg, #179c9c, #02a67c);
+        border: none;
+        color: white;
+        box-shadow: 0 3px 10px rgba(23, 156, 156, 0.25);
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .btn-success:hover {
+        background: linear-gradient(135deg, #127a7a, #028262);
+        box-shadow: 0 6px 14px rgba(23, 156, 156, 0.35);
+        transform: translateY(-2px);
+    }
+
+    /* Tabela estilizada */
+    .table {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(23, 156, 156, 0.08);
+    }
+
+    .table thead {
+        background: linear-gradient(135deg, #179c9c, #1bb3b3);
+        color: white;
+    }
+
+    .table thead th {
+        border: none;
+        padding: 15px;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .table tbody tr {
+        transition: all 0.3s ease;
+        border-bottom: 1px solid #e0eded;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f4f9f9;
+        transform: scale(1.01);
+        box-shadow: 0 2px 8px rgba(23, 156, 156, 0.1);
+    }
+
+    .table tbody td {
+        padding: 15px;
+        vertical-align: middle;
+        color: #2d3e3e;
+        /* Limita o texto longo */
+        max-width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* Coluna de nome do produto */
+    .table tbody td:nth-child(1) {
+        font-weight: 600;
+        color: #179c9c;
+        max-width: 200px;
+    }
+
+    /* Coluna de descrição */
+    .table tbody td:nth-child(2) {
+        max-width: 300px;
+        font-size: 0.9rem;
+        color: #6b7c7c;
+    }
+
+    /* Tooltip para mostrar texto completo ao hover */
+    .table tbody td[title] {
+        cursor: help;
+    }
+
+    /* Ícones de ação */
+    .table tbody td a {
+        margin: 0 8px;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+    }
+
+    .table tbody td a .bi-pencil-fill {
+        color: #179c9c;
+    }
+
+    .table tbody td a .bi-pencil-fill:hover {
+        color: #127a7a;
+        transform: scale(1.2);
+    }
+
+    .table tbody td a.text-danger .bi-trash {
+        color: #E53935;
+    }
+
+    .table tbody td a.text-danger .bi-trash:hover {
+        color: #c62828;
+        transform: scale(1.2);
+    }
+
+    /* Mensagem "Nenhum produto" */
+    .table tbody td.text-center {
+        color: #6b7c7c;
+        font-style: italic;
+        padding: 30px;
+    }
+</style>
+
+<div class="content container mt-4">
+    <h2 class="text-center">{{ form_titulo }}</h2>
+
+    <div class="text-end mb-3">
+        <a class="btn btn-success" href="{% url 'novo_produto' %}">
+            Novo Produto <i class="bi bi-plus-circle"></i>
+        </a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Categoria</th>
+                <th>Quantidade</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for al in Produtos %}
+                <tr>
+                    <td title="{{ al.nome }}">{{ al.nome }}</td>
+                    <td title="{{ al.descricao }}">{{ al.descricao|truncatewords:15 }}</td>
+                    <td>{{ al.categoria.nome }}</td>
+                    <td>{{ al.qnt_estoque }}</td>
+                    <td>
+                        <a href="{% url 'editar_produto' al.id %}" title="Editar produto">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                        <a class="text-danger" href="{% url 'delete_produto' al.id %}" title="Deletar produto">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">Nenhum produto cadastrado.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock conteudo %}

@@ -1,0 +1,113 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Produtos</title>
+    <link rel="stylesheet" href="{% static 'catalogo.css' %}">
+</head>
+<body>
+    <header class="topo">
+        <form method="GET" action="{% url 'catalogo' %}" class="busca">
+            <input type="text" name="q" placeholder="Buscar produtos..." value="{{ request.GET.q }}">
+            <button type="submit">🔍</button>
+        </form>
+
+        <a href="{% url 'home' %}" class="voltar">← Voltar</a>
+    </header>
+
+    <main class="container">
+        <aside class="filtros">
+            <h2>Filtros</h2>
+
+            <form method="GET" action="{% url 'catalogo' %}">
+                <input type="hidden" name="q" value="{{ request.GET.q }}">
+
+                <label>Categoria:</label>
+                <select name="categoria">
+                    <option value="">Todas</option>
+                    {% for cat in categorias %}
+                        <option value="{{ cat.id }}" {% if request.GET.categoria == cat.id|stringformat:"s" %}selected{% endif %}>
+                            {{ cat.nome }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <label>Preço mínimo:</label>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <span>R$</span>
+                    <input type="number" name="preco_min" id="preco-min-input"
+                           min="0" step="0.01"
+                           value="{{ request.GET.preco_min|default:'0' }}"
+                           placeholder="0.00"
+                           oninput="document.getElementById('preco-min-slider').value = this.value"
+                           style="width: 100%; padding: 0.3rem; border: 1px solid #ccc; border-radius: 5px;">
+                </div>
+
+                <input type="range" name="preco_min_slider" id="preco-min-slider"
+                       min="0" max="10000" step="10"
+                       value="{{ request.GET.preco_min|default:'0' }}"
+                       oninput="document.getElementById('preco-min-input').value = this.value"
+                       style="width: 100%; margin-top: 0.3rem;">
+
+                <label>Preço máximo:</label>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <span>R$</span>
+                    <input type="number" name="preco_max" id="preco-max-input"
+                           min="0" step="0.01"
+                           value="{{ request.GET.preco_max|default:'10000' }}"
+                           placeholder="1000.00"
+                           oninput="document.getElementById('preco-max-slider').value = this.value"
+                           style="width: 100%; padding: 0.3rem; border: 1px solid #ccc; border-radius: 5px;">
+                </div>
+
+                <input type="range" name="preco_max_slider" id="preco-max-slider"
+                       min="0" max="1000" step="10"
+                       value="{{ request.GET.preco_max|default:'10000' }}"
+                       oninput="document.getElementById('preco-max-input').value = this.value"
+                       style="width: 100%; margin-top: 0.3rem;">
+
+                <button type="submit" class="limpar">Aplicar Filtros</button>
+                <a href="{% url 'catalogo' %}">
+                    <button type="button" class="limpar">Limpar Filtros</button>
+                </a>
+            </form>
+
+            {% if request.session.usuario_is_vendedor %}
+            <a href="{% url 'produtos' %}">
+                <button class="Cadastrar">Cadastrar Produto</button>
+            </a>
+            {% endif %}
+        </aside>
+
+        <section class="produtos">
+            <h2>Catálogo de Produtos</h2>
+            <p>{{ produtos|length }} produtos encontrados</p>
+
+            <div class="grade-produtos">
+                {% for produto in produtos %}
+                    <div class="card">
+
+                        {% if produto.imagem %}
+                            <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+                        {% else %}
+                            <img src="{% static 'sem-imagem.png' %}" alt="Imagem não disponível">
+                        {% endif %}
+
+                        <h3>{{ produto.nome }}</h3>
+                        <p class="preco" style="color: #000">R$ {{ produto.preco }}</p>
+
+                        <a href="{% url 'detalhe_produto' produto.pk %}">
+                            <button>Ver Detalhes</button>
+                        </a>
+                    </div>
+                {% empty %}
+                    <p>Nenhum produto encontrado.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+</body>
+</html>
